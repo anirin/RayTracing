@@ -1,0 +1,15 @@
+minirt
+
+.DS_Store
+*.code-workspace
+*.o
+*.a
+
+minilibx_opengl.tgz
+minilibx_opengl_20191021/*
+
+test/unit/build
+
+.vscode/*
+
+.github/workflows/test.yml
