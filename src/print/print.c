@@ -1,4 +1,5 @@
 #include "print.h"
+#include "mlx.h"
 
 void	my_mlx_pixel_put(t_data *data, int x, int y, unsigned int color)
 {
