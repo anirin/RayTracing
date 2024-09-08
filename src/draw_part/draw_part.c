@@ -28,10 +28,7 @@ void logic(t_vars *vars, t_vec3 lower_left_corner, t_vec3 horizontal, t_vec3 ver
 			//todo
 			direction = sub_vec3(add_vec3(lower_left_corner, add_vec3(multipul_vec3(horizontal, u), multipul_vec3(vertical, v))), origin);
 			r = init_ray(origin, direction, 0.00, INFINITY);
-			if (hit_sphere(s, r))
-				pixel_color = init_vec3(1, 0, 0);
-			else
-				pixel_color = ray_color(r);
+			pixel_color = ray_normal_color(r, s);
 			draw_pixel(vars, i, (HEIGHT - 1) - j, color2int(pixel_color));
 		}
 	}

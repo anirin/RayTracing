@@ -25,3 +25,18 @@ t_color ray_color(t_ray r)
 	t = 0.5 * (unit_direction.y + 1.0);
 	return (add_vec3(multipul_vec3(white, 1.0 - t), multipul_vec3(blue, t)));
 }
+
+t_color ray_normal_color(t_ray r, t_sphere s)
+{
+	t_vec3 unit_vec;
+	double t;
+
+	t = hit_sphere(s, r);
+	if (t > 0.0)
+	{
+		unit_vec = unit_vec3(sub_vec3(at(r, t), s.center));
+		return multipul_vec3(init_vec3(unit_vec.x + 1, unit_vec.y + 1, unit_vec.z + 1), 0.5);
+	}
+	
+	return (ray_color(r));
+}

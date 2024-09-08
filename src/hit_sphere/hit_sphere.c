@@ -3,7 +3,7 @@
 #include "hit_sphere.h"
 #include <stdbool.h>
 
-bool	hit_sphere(t_sphere s, t_ray r)
+double	hit_sphere(t_sphere s, t_ray r)
 {
 	double a;
 	double half_b;
@@ -17,9 +17,9 @@ bool	hit_sphere(t_sphere s, t_ray r)
 	c = dot_vec3(oc, oc) - s.radius * s.radius;
 	discriminant = half_b * half_b - a * c;
 
-	if (discriminant > 0)
+	if (discriminant > 0.0)
 	{
-		return (true);
+		return -1 * (half_b * 2 + sqrt(discriminant)) / (2.0 * a);
 	}
-	return (false);
+	return (-1);
 }
