@@ -19,7 +19,7 @@ double	hit_sphere(t_sphere s, t_ray r)
 
 	if (discriminant > 0.0)
 	{
-		return -1 * (half_b * 2 + sqrt(discriminant)) / (2.0 * a);
+		return -1 * (half_b + sqrt(discriminant)) / a;
 	}
 	return (-1);
 }
