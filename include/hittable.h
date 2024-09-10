@@ -3,6 +3,7 @@
 
 #include "vec3.h"
 #include "ray.h"
+#include <stdbool.h>
 
 typedef struct s_hit_record
 {

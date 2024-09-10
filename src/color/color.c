@@ -1,5 +1,6 @@
 #include "color.h"
 #include "ray.h"
+#include "stdbool.h"
 
 unsigned int	color2int(t_color c)
 {
@@ -26,15 +27,17 @@ t_color ray_color(t_ray r)
 	return (add_vec3(multipul_vec3(white, 1.0 - t), multipul_vec3(blue, t)));
 }
 
+//法線 & 背景の描画
 t_color ray_normal_color(t_ray r, t_sphere s)
 {
 	t_vec3 unit_vec;
-	double t;
+	t_hit_record rec;
+	bool has_hit;
 
-	t = hit_sphere(s, r);
-	if (t > 0.0)
+	has_hit = hit_sphere(s, r, &rec);
+	if (has_hit)
 	{
-		unit_vec = unit_vec3(sub_vec3(at(r, t), s.center));
+		unit_vec = unit_vec3(sub_vec3(at(r, rec.t), s.center));
 		return multipul_vec3(init_vec3(unit_vec.x + 1, unit_vec.y + 1, unit_vec.z + 1), 0.5);
 	}
 	
