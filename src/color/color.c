@@ -4,15 +4,30 @@
 #include "stdbool.h"
 #include "hittable.h"
 
-unsigned int	color2int(t_color c)
+double my_clamp(double x, double min, double max)
+{
+	if (x < min)
+		return (min);
+	if (x > max)
+		return (max);
+	return (x);
+}
+
+unsigned int	color2int(t_color c, int samples_per_pixel)
 {
 	int	r;
 	int	g;
 	int	b;
 
-	r = ((int)(255.999 * c.x));
-	g = (int)(255.999 * c.y);
-	b = (int)(255.999 * c.z);
+	double scale = 1.0 / samples_per_pixel;
+
+	double double_r = sqrt(c.x * scale);
+	double double_g = sqrt(c.y * scale);
+	double double_b = sqrt(c.z * scale);
+
+	r = ((int)(256 * my_clamp(double_r, 0.0, 0.999)));
+	g = (int)(256 * my_clamp(double_g, 0.0, 0.999));
+	b = (int)(256 * my_clamp(double_b, 0.0, 0.999));
 	return (r << 16 | g << 8 | b);
 }
 

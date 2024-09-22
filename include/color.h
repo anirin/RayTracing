@@ -5,7 +5,7 @@
 #include "ray.h"
 #include "hit_sphere.h"
 
-unsigned int	color2int(t_color c);
+unsigned int	color2int(t_color c, int samples_per_pixel);
 t_color ray_color(t_ray r, t_world world, int depth);
 t_color ray_normal_color(t_ray r, t_sphere s);
 

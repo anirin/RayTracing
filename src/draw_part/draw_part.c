@@ -26,8 +26,7 @@ void logic(t_vars *vars, t_camera camera, t_world world) {
 				r = camera_get_ray(camera, u, v);
 				pixel_color = add_vec3(ray_color(r, world, depth), pixel_color);
 			}
-			pixel_color = div_vec3(pixel_color, sample_per_pixel);
-			draw_pixel(vars, i, (HEIGHT - 1) - j, color2int(pixel_color));
+			draw_pixel(vars, i, (HEIGHT - 1) - j, color2int(pixel_color, sample_per_pixel));
 		}
 	}
 }
