@@ -1,6 +1,8 @@
 #include "color.h"
 #include "ray.h"
+#include "random.h"
 #include "stdbool.h"
+#include "hittable.h"
 
 unsigned int	color2int(t_color c)
 {
@@ -14,7 +16,7 @@ unsigned int	color2int(t_color c)
 	return (r << 16 | g << 8 | b);
 }
 
-t_color ray_color(t_ray r)
+t_color ray_background_color(t_ray r)
 {
 	t_vec3 unit_direction;
 	t_color blue, white;
@@ -34,12 +36,32 @@ t_color ray_normal_color(t_ray r, t_sphere s)
 	t_hit_record rec;
 	bool has_hit;
 
-	has_hit = hit_sphere(s, r, &rec);
+	// todo &の型変換はキモすぎる
+	has_hit = hit_sphere((void *)&s, r, &rec);
 	if (has_hit)
 	{
 		unit_vec = unit_vec3(sub_vec3(at(r, rec.t), s.center));
 		return multipul_vec3(init_vec3(unit_vec.x + 1, unit_vec.y + 1, unit_vec.z + 1), 0.5);
 	}
 	
-	return (ray_color(r));
+	return (ray_background_color(r));
+}
+
+// todo worldを作成する必要がある
+t_color ray_color(t_ray r, t_world world, int depth)
+{
+	t_hit_record rec;
+
+	if (depth <= 0)
+		return (init_vec3(0, 0, 0));
+	
+	if (hit(world, r, &rec))
+	{
+		t_point3 target;
+
+		target = add_vec3(add_vec3(rec.p, rec.normal), random_in_unit_sphere());
+		return div_vec3(ray_color(init_ray(rec.p, sub_vec3(target, rec.p), 0, INFINITY), world, depth - 1), 2);
+	}
+
+	return (ray_background_color(r));
 }

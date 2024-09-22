@@ -13,6 +13,6 @@ typedef struct s_sphere
 	t_color		color;
 }				t_sphere;
 
-double	hit_sphere(t_sphere s, t_ray r, t_hit_record *rec);
+bool	hit_sphere(void *object, t_ray r, t_hit_record *rec);
 
 #endif

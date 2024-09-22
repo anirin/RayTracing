@@ -28,7 +28,8 @@ t_camera init_camera()
 t_ray camera_get_ray(t_camera camera, double u, double v)
 {
 	t_vec3 direction = sub_vec3(add_vec3(camera.lower_left_corner, add_vec3(multipul_vec3(camera.horizontal, u), multipul_vec3(camera.vertical, v))), camera.origin);
-	t_ray r = init_ray(camera.origin, direction, 0.00, INFINITY);
+	// todo minの値が正確か確認
+	t_ray r = init_ray(camera.origin, direction, 0.0001, INFINITY);
 
 	return r;
 }

@@ -8,12 +8,13 @@
 #include "camera.h"
 #include "random.h"
 
-void logic(t_vars *vars, t_camera camera, t_sphere s) {
+void logic(t_vars *vars, t_camera camera, t_world world) {
 	double u;
 	double v;
 	t_ray r;
 	t_color pixel_color;
-	int sample_per_pixel = 1;
+	int sample_per_pixel = 10;
+	int depth = 50;
 
 	for(int j = HEIGHT - 1; j >= 0; --j) {
 		for (int i = 0; i < WIDTH; ++i) {
@@ -23,7 +24,7 @@ void logic(t_vars *vars, t_camera camera, t_sphere s) {
 				v = (j + random_double(0, 1)) / (HEIGHT - 1);
 
 				r = camera_get_ray(camera, u, v);
-				pixel_color = add_vec3(ray_normal_color(r, s), pixel_color);
+				pixel_color = add_vec3(ray_color(r, world, depth), pixel_color);
 			}
 			pixel_color = div_vec3(pixel_color, sample_per_pixel);
 			draw_pixel(vars, i, (HEIGHT - 1) - j, color2int(pixel_color));
@@ -31,15 +32,43 @@ void logic(t_vars *vars, t_camera camera, t_sphere s) {
 	}
 }
 
+void set_world(t_world *world) {
+	t_object_list *objects = malloc(sizeof(t_object_list));
+	t_sphere *s = malloc(sizeof(t_sphere));
+	t_object_list *objects2 = malloc(sizeof(t_object_list));
+	t_sphere *s2 = malloc(sizeof(t_sphere));
+
+	// Sphere1
+	s->center = init_vec3(0, 0, -1);
+	s->radius = 0.5;
+	s->color = init_vec3(0.7, 0.3, 0.3);
+
+	objects->type = SPHERE;
+	objects->hit = hit_sphere;
+	objects->object = s;
+	objects->next = objects2;
+
+	// Sphere2
+
+	s2->center = init_vec3(0, -100.5, -1);
+	s2->radius = 100;
+	s2->color = init_vec3(0.8, 0.8, 0.0);
+
+	objects2->type = SPHERE;
+	objects2->hit = hit_sphere;
+	objects2->object = s2;
+	objects2->next = NULL;
+
+	world->objects = objects;
+}
+
 void draw_part (t_vars *vars)
 {
 	t_camera camera = init_camera();
-	t_sphere s;
+	t_world world;
 
-	s.center = init_vec3(0, 0, -1);
-	s.radius = 0.5;
-	s.color = init_vec3(0.7, 0.3, 0.3);
+	set_world(&world);
 
-	logic(vars, camera, s);
+	logic(vars, camera, world);
 	mlx_put_image_to_window(vars->mlx, vars->win, vars->img.img, 0, 0);
 }

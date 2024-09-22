@@ -4,7 +4,7 @@
 
 static double base_random_double()
 {
-	return rand() / ((long)RAND_MAX + 1);
+	return (double)rand() / ((double)RAND_MAX + 1);
 }
 
 double random_double(double min, double max)

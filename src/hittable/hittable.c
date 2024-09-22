@@ -1,7 +1,22 @@
 #include "hittable.h"
+#include "hit_sphere.h"
 
-void set_face_normal(t_hit_record *rec, t_ray r, t_vec3 outward_normal)
+bool hit(t_world world, t_ray r, t_hit_record *rec)
 {
-	rec->front_face = dot_vec3(r.direction, outward_normal) < 0;
-	rec->normal = rec->front_face ? outward_normal : multipul_vec3(outward_normal, -1);
+	t_hit_record tmp;
+	bool has_hit = false;
+	t_object_list *objects = world.objects;
+
+	while (objects)
+	{
+		if (objects->hit(objects->object, r, &tmp))
+		{
+			has_hit = true;
+			r.t_max = tmp.t;
+			*rec = tmp;
+		}
+		objects = objects->next;
+	}
+
+	return (has_hit);
 }
