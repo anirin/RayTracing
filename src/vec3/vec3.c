@@ -60,6 +60,17 @@ t_vec3	unit_vec3(t_vec3 v)
 	return (div_vec3(v, length_vec3(v)));
 }
 
+t_color	multipul_attenuation_vec3(t_vec3 v, t_vec3 attenuation)
+{
+	t_color	c;
+
+	c.x = v.x * attenuation.x;
+	c.y = v.y * attenuation.y;
+	c.z = v.z * attenuation.z;
+
+	return (c);
+}
+
 double	dot_vec3(t_vec3 v, t_vec3 u)
 {
 	return (v.x * u.x + v.y * u.y + v.z * u.z);

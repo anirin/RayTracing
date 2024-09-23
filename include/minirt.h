@@ -11,7 +11,7 @@
 
 // Ergodic Billiard
 #define WIDTH 1280
-#define HEIGHT 721
+#define HEIGHT 720
 
 typedef struct s_data
 {

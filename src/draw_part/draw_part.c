@@ -31,34 +31,53 @@ void logic(t_vars *vars, t_camera camera, t_world world) {
 	}
 }
 
+t_object_list *create_sphere(t_vec3 center, double radius, t_vec3 color, t_vec3 albedo, t_scatter_function scatter) {
+    t_object_list *obj = malloc(sizeof(t_object_list));
+    t_sphere *sphere = malloc(sizeof(t_sphere));
+    t_material *material = malloc(sizeof(t_material));
+
+    sphere->center = center;
+    sphere->radius = radius;
+    sphere->color = color;
+
+    material->scatter = scatter;
+    material->albedo = albedo;
+
+    obj->type = SPHERE;
+    obj->hit = hit_sphere;
+    obj->object = sphere;
+    obj->material = material;
+    obj->next = NULL;
+
+    return obj;
+}
+
 void set_world(t_world *world) {
-	t_object_list *objects = malloc(sizeof(t_object_list));
-	t_sphere *s = malloc(sizeof(t_sphere));
-	t_object_list *objects2 = malloc(sizeof(t_object_list));
-	t_sphere *s2 = malloc(sizeof(t_sphere));
+    t_object_list *objects = create_sphere(
+        init_vec3(0, 0, -1),      // center
+        0.5,                      // radius
+        init_vec3(0.7, 0.3, 0.3), // color
+        init_vec3(0.999, 0.999, 0.999), // albedo
+        landertian                // scatter function
+    );
 
-	// Sphere1
-	s->center = init_vec3(0, 0, -1);
-	s->radius = 0.5;
-	s->color = init_vec3(0.7, 0.3, 0.3);
+    objects->next = create_sphere(
+        init_vec3(0, -100.5, -1), // center
+        100,                      // radius
+        init_vec3(0.8, 0.8, 0.0), // color
+        init_vec3(0.8, 0.8, 0.0), // albedo
+        landertian                // scatter function
+    );
 
-	objects->type = SPHERE;
-	objects->hit = hit_sphere;
-	objects->object = s;
-	objects->next = objects2;
+    objects->next->next = create_sphere(
+        init_vec3(1, 0, -1), // center
+        0.5,                      // radius
+        init_vec3(0.8, 0.8, 0.0), // color
+        init_vec3(0.8, 0.8, 0.0), // albedo
+        reflect                // scatter function
+    );
 
-	// Sphere2
-
-	s2->center = init_vec3(0, -100.5, -1);
-	s2->radius = 100;
-	s2->color = init_vec3(0.8, 0.8, 0.0);
-
-	objects2->type = SPHERE;
-	objects2->hit = hit_sphere;
-	objects2->object = s2;
-	objects2->next = NULL;
-
-	world->objects = objects;
+    world->objects = objects;
 }
 
 void draw_part (t_vars *vars)

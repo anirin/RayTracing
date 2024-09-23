@@ -1,7 +1,7 @@
 NAME := miniRT
 
 SRCS := src/main.c src/color/color.c src/draw_part/draw_part.c src/print/print.c src/ray/ray.c src/vec3/vec3.c \
-src/hit_sphere/hit_sphere.c src/camera/camera.c src/hittable/hittable.c src/rand/rand.c
+src/hit_sphere/hit_sphere.c src/camera/camera.c src/hittable/hittable.c src/rand/rand.c src/material/material.c
 
 OBJS := $(SRCS:.c=.o)
 

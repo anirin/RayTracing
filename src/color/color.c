@@ -3,6 +3,7 @@
 #include "random.h"
 #include "stdbool.h"
 #include "hittable.h"
+#include "material.h"
 
 double my_clamp(double x, double min, double max)
 {
@@ -45,14 +46,14 @@ t_color ray_background_color(t_ray r)
 }
 
 //法線 & 背景の描画
-t_color ray_normal_color(t_ray r, t_sphere s)
+t_color ray_normal_color(t_ray r, t_sphere s, t_material *material)
 {
 	t_vec3 unit_vec;
 	t_hit_record rec;
 	bool has_hit;
 
 	// todo &の型変換はキモすぎる
-	has_hit = hit_sphere((void *)&s, r, &rec);
+	has_hit = hit_sphere((void *)&s, material, r, &rec);
 	if (has_hit)
 	{
 		unit_vec = unit_vec3(sub_vec3(at(r, rec.t), s.center));
@@ -68,14 +69,22 @@ t_color ray_color(t_ray r, t_world world, int depth)
 	t_hit_record rec;
 
 	if (depth <= 0)
-		return (init_vec3(0, 0, 0));
-	
+	{
+		return (init_vec3(0.0, 0.0, 0.0));
+	}
+
 	if (hit(world, r, &rec))
 	{
-		t_point3 target;
+		t_ray scattered;
+		t_color attenuation;
 
-		target = add_vec3(add_vec3(rec.p, rec.normal), random_in_unit_sphere());
-		return div_vec3(ray_color(init_ray(rec.p, sub_vec3(target, rec.p), 0, INFINITY), world, depth - 1), 2);
+		if (rec.material->scatter(r, &rec, &attenuation, &scattered))
+			return multipul_attenuation_vec3(ray_color(scattered, world, depth - 1), attenuation);
+			// return ray_color(scattered, world, depth - 1);
+		else
+		{
+			return (init_vec3(0.0, 0.0, 0.0));
+		}
 	}
 
 	return (ray_background_color(r));

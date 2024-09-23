@@ -24,5 +24,6 @@ double			dot_vec3(t_vec3 u, t_vec3 v);
 t_vec3			cross_vec3(t_vec3 v, t_vec3 u);
 double			length_vec3(t_vec3 v);
 t_vec3			unit_vec3(t_vec3 v);
+t_color	multipul_attenuation_vec3(t_vec3 v, t_vec3 attenuation);
 
 #endif
